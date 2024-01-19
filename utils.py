@@ -62,3 +62,12 @@ def permute(s, table, base):
 
 def xor(s1: str, s2: str) -> str:
     return "".join([str(int(s1[i]) ^ int(s2[i])) for i in range(len(s1))])
+
+
+def shift_left(s, offset) -> str:
+    offset = offset % len(s)
+    return s[offset:] + s[:offset]
+
+
+if __name__ == "__main__":
+    print(shift_left("00001111", 5))
