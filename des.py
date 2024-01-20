@@ -3,7 +3,7 @@ from textwrap import wrap
 
 from const import key_parity, shift_table, key_compression, initial_table, expansion_table, sub_boxes, final_sbox_table, \
     final_table
-from utils import hex2bin, permute, shift_left, xor, bin2dec
+from utils import hex2bin, permute, shift_left, xor, bin2dec, bin2hex, dec2bin
 
 round_key_pairs = namedtuple('RoundKey', ['round_key_bin', 'round_key_hex'])
 
@@ -23,8 +23,8 @@ def round_key(key):
 
         res = left + right
 
-        bin_key_48 = permute(res, key_compression, 32)
-        hex_key_48 = hex2bin(bin_key_48)
+        bin_key_48 = permute(res, key_compression, 48)
+        hex_key_48 = bin2hex(bin_key_48)
 
         round_key_table.append(round_key_pairs(round_key_bin=bin_key_48, round_key_hex=hex_key_48))
 
@@ -36,10 +36,10 @@ def sbox_conversion(bin_key_48):
 
     res = ""
     for i, substr in enumerate(sub_strs):
-        row = bin2dec(substr[1:6])
-        col = bin2dec(substr[0] + substr[-1])
+        col = bin2dec(substr[1:5])
+        row = bin2dec(substr[0] + substr[-1])
 
-        res += sub_boxes[i][row][col]
+        res += dec2bin(sub_boxes[i][row][col])
 
     return res
 
@@ -71,14 +71,18 @@ def encrypt(plain_text, key=None, rk_table=None):
 
     combine = left + right
     final = permute(combine, final_table, 64)
-    return final
+    return bin2hex(final)
 
 
 def decrypt(cipher_text, key):
     round_key_table = round_key(key)
     round_key_table = round_key_table[::-1]
-    return encrypt(cipher_text, round_key_table)
+    return encrypt(cipher_text, rk_table=round_key_table)
 
 
 if __name__ == "__main__":
-    ...
+    text = "123456ABCD132536"
+    key_hex = "AABB09182736CCDD"
+    encrypted_text = "C0B7A8D05F3A829C"
+
+    print(f'Decrypt text: {bin2hex(decrypt(encrypted_text, key_hex))}')

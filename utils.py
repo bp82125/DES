@@ -1,3 +1,5 @@
+from re import sub
+
 hex2bin_table = {'0': "0000",
                  '1': "0001",
                  '2': "0010",
@@ -8,12 +10,12 @@ hex2bin_table = {'0': "0000",
                  '7': "0111",
                  '8': "1000",
                  '9': "1001",
-                 'A': "1010",
-                 'B': "1011",
-                 'C': "1100",
-                 'D': "1101",
-                 'E': "1110",
-                 'F': "1111"}
+                 'a': "1010",
+                 'b': "1011",
+                 'c': "1100",
+                 'd': "1101",
+                 'e': "1110",
+                 'f': "1111"}
 
 bin2hex_table = {"0000": '0',
                  "0001": '1',
@@ -25,12 +27,12 @@ bin2hex_table = {"0000": '0',
                  "0111": '7',
                  "1000": '8',
                  "1001": '9',
-                 "1010": 'A',
-                 "1011": 'B',
-                 "1100": 'C',
-                 "1101": 'D',
-                 "1110": 'E',
-                 "1111": 'F'}
+                 "1010": 'a',
+                 "1011": 'b',
+                 "1100": 'c',
+                 "1101": 'd',
+                 "1110": 'e',
+                 "1111": 'f'}
 
 
 def hex2bin(s: str) -> str:
@@ -69,5 +71,24 @@ def shift_left(s, offset) -> str:
     return s[offset:] + s[:offset]
 
 
+def text_to_base64(s):
+    hex_str = s.encode(encoding="ascii").hex()
+
+    if len(hex_str) % 16 == 0:
+        return hex_str
+
+    padding_length = 16 - (len(hex_str) % 16)
+    padded_str = hex_str + '0' * padding_length
+
+    return padded_str
+
+
+def base64_to_text(s):
+    hex_str = sub(r'00(?=0*$)', '', s)
+    return bytes.fromhex(hex_str).decode('ascii')
+
+
 if __name__ == "__main__":
-    print(shift_left("00001111", 5))
+    # print(text_to_base64("Hello, World!"))
+    # print(len("48665c6c6f2c20576f726c6421"))
+    print(base64_to_text("48656c6c6f2c20576f726c6421000000"))
