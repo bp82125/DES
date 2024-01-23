@@ -26,13 +26,22 @@ def DES_decrypt(cipher_text, key):
 
 
 if __name__ == "__main__":
-    print("Enter the text for encryption: ")
-    pt = input()
-    print("Enter the key for encryption (8 characters length):")
-    key = input()
+    print("Please choose the mode for this program: 1 for encryption, 2 for decryption: ")
+    mode = int(input())
 
-    ct = DES_encrypt(pt, key)
-    print(f"Cipher text: {ct}")
+    if mode == 1:
+        print("Enter the text for encryption: ")
+        pt = input()
+        print("Enter the key for encryption (8 characters length max):")
+        key = input()
 
-    ori_pt = DES_decrypt(ct, key)
-    print(f"Original text: {ori_pt}")
+        ct = DES_encrypt(pt, key)
+        print(f"Cipher text: {ct}")
+    else:
+        print("Enter the text for deryption: ")
+        ct = input()
+        print("Enter the key for decryption (8 characters length max):")
+        key = input()
+
+        ori_pt = DES_decrypt(ct, key)
+        print(f"Original text: {ori_pt}")
