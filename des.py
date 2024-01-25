@@ -1,8 +1,7 @@
 from collections import namedtuple
 from textwrap import wrap
 
-from const import key_parity, shift_table, key_compression, initial_table, expansion_table, sub_boxes, final_sbox_table, \
-    final_table
+from const import key_parity, shift_table, key_compression, initial_table, expansion_table, sub_boxes, final_sbox_table, final_table
 from utils import hex2bin, permute, shift_left, xor, bin2dec, bin2hex, dec2bin
 
 round_key_pairs = namedtuple('RoundKey', ['round_key_bin', 'round_key_hex'])
